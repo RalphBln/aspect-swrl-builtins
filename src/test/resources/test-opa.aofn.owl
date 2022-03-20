@@ -1,0 +1,31 @@
+Prefix(:=<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867/>)
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
+
+
+Ontology(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867>
+
+Declaration(Class(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#A>))
+Declaration(ObjectProperty(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#r>))
+Declaration(NamedIndividual(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I1>))
+Declaration(NamedIndividual(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I2>))
+Declaration(AnnotationProperty(<http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled>))
+
+
+
+
+############################
+#   Named Individuals
+############################
+
+# Individual: <http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I1> (<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I1>)
+
+ObjectPropertyAssertion(Aspect(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#A>) <http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#r> <http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I1> <http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I2>)
+
+
+DLSafeRule(Annotation(<http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled> "true"^^xsd:boolean) Annotation(rdfs:comment ""^^xsd:string) Annotation(rdfs:label "S1"^^xsd:string) Body(BuiltInAtom(<https://ontology.aspectowl.xyz/built-ins/5.2.0/AspectSWRLBuiltinsLibrary.owl#opa> Variable(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#r>) Variable(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I1>) Variable(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I2>) Variable(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#A>)))Head())
+
+)
