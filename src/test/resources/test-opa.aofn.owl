@@ -10,8 +10,10 @@ Ontology(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-on
 
 Declaration(Class(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#A>))
 Declaration(ObjectProperty(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#r>))
+Declaration(ObjectProperty(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#successor>))
 Declaration(NamedIndividual(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I1>))
 Declaration(NamedIndividual(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I2>))
+Declaration(NamedIndividual(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I3>))
 Declaration(AnnotationProperty(<http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled>))
 
 
@@ -25,7 +27,11 @@ Declaration(AnnotationProperty(<http://swrl.stanford.edu/ontologies/3.3/swrla.ow
 
 ObjectPropertyAssertion(Aspect(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#A>) <http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#r> <http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I1> <http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I2>)
 
+# Individual: <http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I2> (<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I2>)
 
-DLSafeRule(Annotation(<http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled> "true"^^xsd:boolean) Annotation(rdfs:comment ""^^xsd:string) Annotation(rdfs:label "S1"^^xsd:string) Body(BuiltInAtom(<https://ontology.aspectowl.xyz/built-ins/5.2.0/AspectSWRLBuiltinsLibrary.owl#opa> Variable(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#r>) Variable(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I1>) Variable(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I2>) Variable(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#A>)))Head())
+ObjectPropertyAssertion(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#successor> <http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I2> <http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I3>)
+
+
+DLSafeRule(Annotation(<http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled> "true"^^xsd:boolean) Annotation(rdfs:comment ""^^xsd:string) Annotation(rdfs:label "S1"^^xsd:string) Body(BuiltInAtom(<https://ontology.aspectowl.xyz/built-ins/5.2.0/AspectSWRLBuiltinsLibrary.owl#opa> Variable(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#r>) Variable(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I1>) Variable(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I2>) Variable(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#A>)) ObjectPropertyAtom(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#successor> <http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I2> Variable(:succ)) BuiltInAtom(<https://ontology.aspectowl.xyz/built-ins/5.2.0/AspectSWRLBuiltinsLibrary.owl#createOPA> Variable(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#r>) Variable(<http://ontology.aspectowl.xyz/reasoner/aspectowl2tptp/test/untitled-ontology-867#I1>) Variable(:succ) Variable(:newAspect)))Head())
 
 )
