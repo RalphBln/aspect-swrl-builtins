@@ -4,12 +4,14 @@ import de.fuberlin.csw.aspectowl.owlapi.model.OWLAspectAssertionAxiom;
 import de.fuberlin.csw.aspectowl.owlapi.model.OWLJoinPointAxiomPointcut;
 import de.fuberlin.csw.aspectowl.owlapi.model.OWLOntologyAspectManager;
 import de.fuberlin.csw.aspectowl.owlapi.protege.AspectOWLEditorKitHook;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.semanticweb.owlapi.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swrlapi.builtins.AbstractSWRLBuiltInLibrary;
 import org.swrlapi.builtins.arguments.SWRLBuiltInArgument;
 import org.swrlapi.builtins.arguments.SWRLBuiltInArgumentType;
+import org.swrlapi.builtins.arguments.SWRLMultiValueVariableBuiltInArgument;
 import org.swrlapi.exceptions.SWRLBuiltInException;
 import org.swrlapi.exceptions.SWRLBuiltInLibraryException;
 
@@ -47,35 +49,47 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
      * @throws SWRLBuiltInException
      */
     public boolean opa(List<SWRLBuiltInArgument> arguments) throws SWRLBuiltInException {
-        // argument 1: object property op
-        // argument 2: individual i1
-        // argument 3: individual i2
-        // argument 4: aspect a such that aspect(a, op(i1, i2))
+        // argument 1: aspect a such that aspect(a, op(i1, i2))
+        // argument 2: object property op
+        // argument 3: individual i1
+        // argument 4: individual i2
         checkNumberOfArgumentsEqualTo(4, arguments.size());
-        SWRLBuiltInArgument opArg = arguments.get(0);
-        SWRLBuiltInArgument i1Arg = arguments.get(1);
-        SWRLBuiltInArgument i2Arg = arguments.get(2);
-        SWRLBuiltInArgument aspectArg = arguments.get(3);
+        SWRLBuiltInArgument aspectArg = arguments.get(0);
+        SWRLBuiltInArgument opArg = arguments.get(1);
+        SWRLBuiltInArgument i1Arg = arguments.get(2);
+        SWRLBuiltInArgument i2Arg = arguments.get(3);
 
-        // opArg can either be variable or concrete value
-        // if variable, must be bound
-        // either way, value must be an OWLObjectProperty
-        final OWLObjectProperty op = getOWLObjectProperty(opArg, 1);
-        final OWLNamedIndividual i1 = getOWLNamedIndividual(i1Arg, 2);
-        final OWLNamedIndividual i2 = getOWLNamedIndividual(i2Arg, 3);
-        final OWLClass aspect = getOWLClass(aspectArg, 4);
+        final OWLObjectProperty op = getOWLObjectProperty(opArg, 2);
+        final OWLNamedIndividual i1 = getOWLNamedIndividual(i1Arg, 3);
+        final OWLNamedIndividual i2 = getOWLNamedIndividual(i2Arg, 4);
 
         OWLOntology onto = getBuiltInBridge().getOWLOntology();
 
-        OWLOntologyAspectManager aspectManager = AspectOWLEditorKitHook.getAspectManager(onto.getOWLOntologyManager());
-
         var axiomOptional = onto.getObjectPropertyAssertionAxioms(i1).stream().filter(ax -> ax.getProperty().equals(op) && ax.getObject().equals(i2)).findFirst();
-
-        if (axiomOptional.isPresent()) {
-            return aspectManager.getAssertedAspects(onto, axiomOptional.get()).stream().anyMatch(as -> as.asClassExpression().equals(aspect));
+        if (!axiomOptional.isPresent()) {
+            // this axiom does not exist, so there cannot be a contextualized version of it.
+            return false;
         }
 
-        return false;
+        // the OPA axiom
+        OWLObjectPropertyAssertionAxiom joinPointAxiom = axiomOptional.get();
+
+        OWLOntologyAspectManager aspectManager = AspectOWLEditorKitHook.getAspectManager(onto.getOWLOntologyManager());
+
+        if (aspectArg.isVariable() && aspectArg.asVariable().isUnbound()) {
+            // aspect variable is unbound, we have to find all aspects for the given axiom
+
+            final Map<@NonNull Integer, @NonNull SWRLMultiValueVariableBuiltInArgument> outputMultiValueArguments = createOutputMultiValueArguments(arguments);
+
+            aspectManager.getAssertedAspects(onto, joinPointAxiom).stream().filter(aspect -> !aspect.isAnonymous()).forEach(aspect -> outputMultiValueArguments.get(0).addArgument(createClassBuiltInArgument(aspect.asClassExpression().asOWLClass())));
+
+            return processResultMultiValueArguments(arguments, outputMultiValueArguments);
+        } else {
+            // aspect is given (directly or via bound variable), we just have to check if the given axiom has the given aspect
+            final OWLClass aspect = getOWLClass(aspectArg, 1);
+
+            return aspectManager.getAssertedAspects(onto, joinPointAxiom).stream().anyMatch(as -> as.asClassExpression().equals(aspect));
+        }
     }
 
     /**

@@ -1,0 +1,77 @@
+Prefix(:=<http://aspectowl.xyz/example/untitled-ontology-876#>)
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
+Prefix(aspectswrl:=<https://ontology.aspectowl.xyz/built-ins/5.2.0/AspectSWRLBuiltinsLibrary.owl#>)
+
+
+Ontology(<http://aspectowl.xyz/example/untitled-ontology-876>
+
+Declaration(Class(:A))
+Declaration(Class(:B))
+Declaration(ObjectProperty(:r))
+Declaration(ObjectProperty(:s))
+Declaration(NamedIndividual(:I1))
+Declaration(NamedIndividual(:I2))
+Declaration(NamedIndividual(:I3))
+Declaration(NamedIndividual(:I4))
+Declaration(AnnotationProperty(<http://purl.org/dc/elements/1.1/creator>))
+Declaration(AnnotationProperty(<http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled>))
+
+############################
+#   Object Properties
+############################
+
+# Object Property: :r (:r)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :r <http://orcid.org/0000-0002-4349-6726>)
+
+# Object Property: :s (:s)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :s <http://orcid.org/0000-0002-4349-6726>)
+
+
+
+############################
+#   Classes
+############################
+
+# Class: :A (:A)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :A <http://orcid.org/0000-0002-4349-6726>)
+
+# Class: :B (:B)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :B <http://orcid.org/0000-0002-4349-6726>)
+
+
+############################
+#   Named Individuals
+############################
+
+# Individual: :I1 (:I1)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :I1 <http://orcid.org/0000-0002-4349-6726>)
+ObjectPropertyAssertion(Aspect(:A) :r :I1 :I2)
+
+# Individual: :I2 (:I2)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :I2 <http://orcid.org/0000-0002-4349-6726>)
+
+# Individual: :I3 (:I3)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :I3 <http://orcid.org/0000-0002-4349-6726>)
+ObjectPropertyAssertion(Aspect(:B) :s :I3 :I4)
+
+# Individual: :I4 (:I4)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :I4 <http://orcid.org/0000-0002-4349-6726>)
+
+
+DLSafeRule(Annotation(<http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled> "true"^^xsd:boolean) Annotation(rdfs:comment ""^^xsd:string) Annotation(rdfs:label "S1"^^xsd:string) Body(BuiltInAtom(<http://swrl.stanford.edu/ontologies/built-ins/5.0.0/tbox.owl#opd> Variable(:op)) BuiltInAtom(<http://swrl.stanford.edu/ontologies/built-ins/5.0.0/abox.owl#opaa> Variable(:a) Variable(:op) Variable(:b)) BuiltInAtom(aspectswrl:opa Variable(:aspect) Variable(:op) Variable(:a) Variable(:b)))Head(BuiltInAtom(<http://sqwrl.stanford.edu/ontologies/built-ins/3.4/sqwrl.owl#select> Variable(:aspect) Variable(:a) Variable(:b))))
+
+
+
+)
