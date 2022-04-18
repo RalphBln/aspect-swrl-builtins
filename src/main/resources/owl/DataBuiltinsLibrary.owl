@@ -10,6 +10,8 @@
     <owl:Ontology rdf:about=""/>
     <swrl:Builtin rdf:ID="opa"/>
     <swrl:Builtin rdf:ID="createOPA"/>
+    <swrl:Builtin rdf:ID="temporal"/>
+    <swrl:Builtin rdf:ID="deontic"/>
 </rdf:RDF>
 
 

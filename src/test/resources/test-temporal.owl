@@ -1,0 +1,81 @@
+Prefix(:=<http://aspectowl.xyz/example/untitled-ontology-889#>)
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
+Prefix(aspectswrl:=<https://ontology.aspectowl.xyz/built-ins/5.2.0/AspectSWRLBuiltinsLibrary.owl#>)
+
+
+Ontology(<http://aspectowl.xyz/example/untitled-ontology-889>
+
+Declaration(ObjectProperty(:after))
+Declaration(ObjectProperty(:before))
+Declaration(ObjectProperty(:chancellorOf))
+Declaration(ObjectProperty(:dismissed))
+Declaration(ObjectProperty(:elected))
+Declaration(NamedIndividual(:Germany))
+Declaration(NamedIndividual(:Merkel))
+Declaration(NamedIndividual(:Scholz))
+Declaration(NamedIndividual(:Year2005))
+Declaration(NamedIndividual(:Year2021))
+Declaration(AnnotationProperty(<http://purl.org/dc/elements/1.1/creator>))
+Declaration(AnnotationProperty(<http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled>))
+
+############################
+#   Object Properties
+############################
+
+# Object Property: :after (:after)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :after <http://orcid.org/0000-0002-4349-6726>)
+InverseObjectProperties(:after :before)
+
+# Object Property: :before (:before)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :before <http://orcid.org/0000-0002-4349-6726>)
+
+# Object Property: :chancellorOf (:chancellorOf)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :chancellorOf <http://orcid.org/0000-0002-4349-6726>)
+
+# Object Property: :dismissed (:dismissed)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :dismissed <http://orcid.org/0000-0002-4349-6726>)
+
+# Object Property: :elected (:elected)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :elected <http://orcid.org/0000-0002-4349-6726>)
+
+
+
+############################
+#   Named Individuals
+############################
+
+# Individual: :Germany (:Germany)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :Germany <http://orcid.org/0000-0002-4349-6726>)
+
+# Individual: :Merkel (:Merkel)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :Merkel <http://orcid.org/0000-0002-4349-6726>)
+ObjectPropertyAssertion(:dismissed :Merkel :Year2021)
+ObjectPropertyAssertion(:elected :Merkel :Year2005)
+
+# Individual: :Scholz (:Scholz)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :Scholz <http://orcid.org/0000-0002-4349-6726>)
+ObjectPropertyAssertion(:elected :Scholz :Year2021)
+
+# Individual: :Year2005 (:Year2005)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :Year2005 <http://orcid.org/0000-0002-4349-6726>)
+
+# Individual: :Year2021 (:Year2021)
+
+AnnotationAssertion(<http://purl.org/dc/elements/1.1/creator> :Year2021 <http://orcid.org/0000-0002-4349-6726>)
+
+
+DLSafeRule(Annotation(<http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled> "true"^^xsd:boolean) Annotation(rdfs:comment ""^^xsd:string) Annotation(rdfs:label "S1"^^xsd:string) Body(ObjectPropertyAtom(:elected Variable(:p) Variable(:y1)) ObjectPropertyAtom(:dismissed Variable(:p) Variable(:y2)) BuiltInAtom(aspectswrl:createOPA Variable(:chancellorOf) Variable(:p) Variable(:Germany) Variable(:a)) BuiltInAtom(aspectswrl:temporal Variable(:a) Variable(:after) Variable(:y1) "true"^^xsd:boolean) BuiltInAtom(aspectswrl:temporal Variable(:a) Variable(:before) Variable(:y2) "true"^^xsd:boolean))Head())
+)

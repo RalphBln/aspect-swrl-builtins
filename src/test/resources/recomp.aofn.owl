@@ -1,0 +1,68 @@
+Prefix(:=<http://ontology.aspectowl.xyz/example/recomp#>)
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
+Prefix(aspectswrl:=<https://ontology.aspectowl.xyz/built-ins/5.2.0/AspectSWRLBuiltinsLibrary.owl#>)
+
+
+Ontology(<http://ontology.aspectowl.xyz/example/recomp>
+
+Declaration(Class(:AnalyzableAt))
+Declaration(Class(:BeforeAnalysis_123))
+Declaration(Class(:Data))
+Declaration(Class(:Node))
+Declaration(Class(:Purpose))
+Declaration(ObjectProperty(:allowedPurpose))
+Declaration(ObjectProperty(:analysisResultOf))
+Declaration(ObjectProperty(:dataAt))
+Declaration(ObjectProperty(:hasData))
+Declaration(ObjectProperty(:hasNode))
+Declaration(ObjectProperty(:hasPurpose))
+Declaration(NamedIndividual(:analyzableAt_behavior_node1_marketing))
+Declaration(NamedIndividual(:dataAnalysisOfBehavior))
+Declaration(NamedIndividual(:dataBehavior))
+Declaration(NamedIndividual(:marketing))
+Declaration(NamedIndividual(:node1))
+Declaration(AnnotationProperty(<http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled>))
+
+
+
+
+############################
+#   Named Individuals
+############################
+
+# Individual: :analyzableAt_behavior_node1_marketing (:analyzableAt_behavior_node1_marketing)
+
+ClassAssertion(:AnalyzableAt :analyzableAt_behavior_node1_marketing)
+ObjectPropertyAssertion(:hasData :analyzableAt_behavior_node1_marketing :dataBehavior)
+ObjectPropertyAssertion(:hasNode :analyzableAt_behavior_node1_marketing :node1)
+ObjectPropertyAssertion(:hasPurpose :analyzableAt_behavior_node1_marketing :marketing)
+
+# Individual: :dataAnalysisOfBehavior (:dataAnalysisOfBehavior)
+
+ClassAssertion(:Data :dataAnalysisOfBehavior)
+ObjectPropertyAssertion(:analysisResultOf :dataAnalysisOfBehavior :dataBehavior)
+ObjectPropertyAssertion(Aspect(<http://ontology.aspectowl.xyz/example/recomp#1c7bf52f-a176-44b0-9db8-60de12e3b7bb>) :dataAt :dataAnalysisOfBehavior :node1)
+
+# Individual: :dataBehavior (:dataBehavior)
+
+ClassAssertion(:Data :dataBehavior)
+ObjectPropertyAssertion(:allowedPurpose :dataBehavior :marketing)
+ObjectPropertyAssertion(Aspect(:BeforeAnalysis_123) :dataAt :dataBehavior :node1)
+
+# Individual: :marketing (:marketing)
+
+ClassAssertion(:Purpose :marketing)
+
+# Individual: :node1 (:node1)
+
+ClassAssertion(:Node :node1)
+
+
+DLSafeRule(Annotation(<http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled> "true"^^xsd:boolean) Annotation(rdfs:comment ""^^xsd:string) Annotation(rdfs:label "S1"^^xsd:string) Body(ClassAtom(:AnalyzableAt Variable(<http://ontology.aspectowl.xyz/example/recomp/a>)) ObjectPropertyAtom(:hasData Variable(<http://ontology.aspectowl.xyz/example/recomp/a>) Variable(<http://ontology.aspectowl.xyz/example/recomp/data>)) ObjectPropertyAtom(:hasPurpose Variable(<http://ontology.aspectowl.xyz/example/recomp/a>) Variable(<http://ontology.aspectowl.xyz/example/recomp/purpose>)) ObjectPropertyAtom(:hasNode Variable(<http://ontology.aspectowl.xyz/example/recomp/a>) Variable(<http://ontology.aspectowl.xyz/example/recomp/node>)) ObjectPropertyAtom(:allowedPurpose Variable(<http://ontology.aspectowl.xyz/example/recomp/data>) Variable(<http://ontology.aspectowl.xyz/example/recomp/purpose>)) BuiltInAtom(<http://swrl.stanford.edu/ontologies/built-ins/5.0.0/tbox.owl#cd> Variable(<http://ontology.aspectowl.xyz/example/recomp/beforeAnalysisAspect>)) BuiltInAtom(aspectswrl:opa Variable(<http://ontology.aspectowl.xyz/example/recomp/beforeAnalysisAspect>) Variable(:dataAt) Variable(<http://ontology.aspectowl.xyz/example/recomp/data>) Variable(<http://ontology.aspectowl.xyz/example/recomp/node>)) ObjectPropertyAtom(:analysisResultOf Variable(<http://ontology.aspectowl.xyz/example/recomp/newData>) Variable(<http://ontology.aspectowl.xyz/example/recomp/data>)) BuiltInAtom(aspectswrl:createOPA Variable(<http://ontology.aspectowl.xyz/example/recomp/afterAnalysisAspect>) Variable(:dataAt) Variable(<http://ontology.aspectowl.xyz/example/recomp/newData>) Variable(<http://ontology.aspectowl.xyz/example/recomp/node>)))Head(BuiltInAtom(<http://swrl.stanford.edu/ontologies/built-ins/5.0.0/tbox.owl#dca> Variable(<http://ontology.aspectowl.xyz/example/recomp/beforeAnalysisAspect>) Variable(<http://ontology.aspectowl.xyz/example/recomp/afterAnalysisAspect>))))
+
+
+)
