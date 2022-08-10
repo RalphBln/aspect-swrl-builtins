@@ -1,9 +1,9 @@
 package org.swrlapi.builtins.aspectswrl;
 
-import de.fuberlin.csw.aspectowl.owlapi.model.OWLAspectAssertionAxiom;
-import de.fuberlin.csw.aspectowl.owlapi.model.OWLJoinPointAxiomPointcut;
-import de.fuberlin.csw.aspectowl.owlapi.model.OWLOntologyAspectManager;
-import de.fuberlin.csw.aspectowl.owlapi.protege.AspectOWLEditorKitHook;
+import xyz.aspectowl.owlapi.model.OWLAspectAssertionAxiom;
+import xyz.aspectowl.owlapi.model.AspectOWLJoinPointAxiomPointcut;
+import xyz.aspectowl.owlapi.model.OWLAspectManager;
+import xyz.aspectowl.owlapi.protege.AspectOWLEditorKitHook;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.semanticweb.owlapi.model.*;
 import org.slf4j.Logger;
@@ -80,7 +80,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
         // the OPA axiom
         OWLObjectPropertyAssertionAxiom joinPointAxiom = axiomOptional.get();
 
-        OWLOntologyAspectManager aspectManager = AspectOWLEditorKitHook.getAspectManager(onto.getOWLOntologyManager());
+        OWLAspectManager aspectManager = AspectOWLEditorKitHook.getAspectManager(onto.getOWLOntologyManager());
 
         if (aspectArg.isVariable() && aspectArg.asVariable().isUnbound()) {
             // aspect variable is unbound, we have to find all aspects for the given axiom
@@ -159,8 +159,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
 
         man.applyChanges(changes);
 
-        OWLOntologyAspectManager aspectManager = AspectOWLEditorKitHook.getAspectManager(man);
-        OWLAspectAssertionAxiom aspectAssertionAxiom = aspectManager.getAspectAssertionAxiom(onto, new OWLJoinPointAxiomPointcut(joinPointAxiom), aspectManager.getAspect(aspectClass, Collections.EMPTY_SET, Collections.EMPTY_SET));
+        OWLAspectManager aspectManager = AspectOWLEditorKitHook.getAspectManager(man);
+        OWLAspectAssertionAxiom aspectAssertionAxiom = aspectManager.getAspectAssertionAxiom(onto, new AspectOWLJoinPointAxiomPointcut(joinPointAxiom), aspectManager.getAspect(aspectClass, Collections.EMPTY_SET, Collections.EMPTY_SET));
         aspectManager.addAspect(onto, aspectAssertionAxiom);
 
         return true;
@@ -230,6 +230,16 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
 
         man.applyChanges(changes);
 
+        return true;
+    }
+
+    public boolean deontic(List<SWRLBuiltInArgument> arguments) throws SWRLBuiltInException {
+        // TODO implement
+        return true;
+    }
+
+    public boolean nest(List<SWRLBuiltInArgument> arguments) throws SWRLBuiltInException {
+        // TODO implement
         return true;
     }
 
