@@ -1,5 +1,6 @@
 package org.swrlapi.builtins.aspectswrl;
 
+import org.semanticweb.owlapi.model.parameters.Imports;
 import xyz.aspectowl.owlapi.model.OWLAspectAssertionAxiom;
 import xyz.aspectowl.owlapi.model.AspectOWLJoinPointAxiomPointcut;
 import xyz.aspectowl.owlapi.model.OWLAspectManager;
@@ -61,13 +62,13 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
         // argument 4: individual i2
         checkNumberOfArgumentsEqualTo(4, arguments.size());
         SWRLBuiltInArgument aspectArg = arguments.get(0);
-        SWRLBuiltInArgument opArg = arguments.get(1);
-        SWRLBuiltInArgument i1Arg = arguments.get(2);
-        SWRLBuiltInArgument i2Arg = arguments.get(3);
+//        SWRLBuiltInArgument opArg = arguments.get(1);
+//        SWRLBuiltInArgument i1Arg = arguments.get(2);
+//        SWRLBuiltInArgument i2Arg = arguments.get(3);
 
-        final OWLObjectProperty op = getOWLObjectProperty(opArg, 2);
-        final OWLNamedIndividual i1 = getOWLNamedIndividual(i1Arg, 3);
-        final OWLNamedIndividual i2 = getOWLNamedIndividual(i2Arg, 4);
+        final OWLObjectProperty op = getOWLObjectProperty(arguments, 2);
+        final OWLNamedIndividual i1 = getOWLNamedIndividual(arguments, 3);
+        final OWLNamedIndividual i2 = getOWLNamedIndividual(arguments, 4);
 
         OWLOntology onto = getBuiltInBridge().getOWLOntology();
 
@@ -92,7 +93,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
             return processResultMultiValueArguments(arguments, outputMultiValueArguments);
         } else {
             // aspect is given (directly or via bound variable), we just have to check if the given axiom has the given aspect
-            final OWLClass aspect = getOWLClass(aspectArg, 1);
+            final OWLClass aspect = getOWLClass(arguments, 1);
 
             return aspectManager.getAssertedAspects(onto, joinPointAxiom).stream().anyMatch(as -> as.asClassExpression().equals(aspect));
         }
@@ -113,9 +114,9 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
         // argument 3: individual i2
         // argument 4: aspect a such that aspect(a, op(i1, i2))
         checkNumberOfArgumentsEqualTo(4, arguments.size());
-        SWRLBuiltInArgument opArg = arguments.get(0);
-        SWRLBuiltInArgument i1Arg = arguments.get(1);
-        SWRLBuiltInArgument i2Arg = arguments.get(2);
+//        SWRLBuiltInArgument opArg = arguments.get(0);
+//        SWRLBuiltInArgument i1Arg = arguments.get(1);
+//        SWRLBuiltInArgument i2Arg = arguments.get(2);
         SWRLBuiltInArgument aspectArg = arguments.get(3);
 
         OWLOntology onto = getBuiltInBridge().getOWLOntology();
@@ -128,7 +129,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
         if (aspectArg.isVariable()) {
             var aspectVar = aspectArg.asVariable();
             if (aspectVar.isBound()) {
-                aspectClass = getOWLClass(aspectArg, 1); // throws exception if not a class
+                aspectClass = getOWLClass(arguments, 1); // throws exception if not a class
             } else {
                 // variable arg but not bound - create new and bind to variable
                 aspectClass = df.getOWLClass(IRI.create(onto.getOntologyID().getOntologyIRI().get().toString() + "#" + UUID.randomUUID().toString()));
@@ -137,15 +138,15 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
                 aspectVar.setBuiltInResult(createClassBuiltInArgument(aspectClass));
             }
         } else {
-            aspectClass = getOWLClass(aspectArg, 1); // throws exception if not a class
+            aspectClass = getOWLClass(arguments, 1); // throws exception if not a class
         }
 
         // opArg can either be variable or concrete value
         // if variable, must be bound
         // either way, value must be an OWLObjectProperty
-        final OWLObjectProperty op = getOWLObjectProperty(opArg, 1);
-        final OWLNamedIndividual i1 = getOWLNamedIndividual(i1Arg, 2);
-        final OWLNamedIndividual i2 = getOWLNamedIndividual(i2Arg, 3);
+        final OWLObjectProperty op = getOWLObjectProperty(arguments, 1);
+        final OWLNamedIndividual i1 = getOWLNamedIndividual(arguments, 2);
+        final OWLNamedIndividual i2 = getOWLNamedIndividual(arguments, 3);
 
 
         var joinPointAxiomOptional = onto.getObjectPropertyAssertionAxioms(i1).stream().filter(ax -> ax.getProperty().equals(op) && ax.getObject().equals(i2)).findFirst();
@@ -166,6 +167,64 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
         return true;
     }
 
+    public boolean createNegativeOPA(List<SWRLBuiltInArgument> arguments) throws SWRLBuiltInException {
+        // argument 1: object property op
+        // argument 2: individual i1
+        // argument 3: individual i2
+        // argument 4: aspect a such that aspect(a, op(i1, i2))
+        checkNumberOfArgumentsEqualTo(4, arguments.size());
+//        SWRLBuiltInArgument opArg = arguments.get(0);
+//        SWRLBuiltInArgument i1Arg = arguments.get(1);
+//        SWRLBuiltInArgument i2Arg = arguments.get(2);
+        SWRLBuiltInArgument aspectArg = arguments.get(3);
+
+        OWLOntology onto = getBuiltInBridge().getOWLOntology();
+        OWLOntologyManager man = onto.getOWLOntologyManager();
+        OWLDataFactory df = man.getOWLDataFactory();
+
+        ArrayList<OWLAxiomChange> changes = new ArrayList<>();
+
+        OWLClass aspectClass = null;
+        if (aspectArg.isVariable()) {
+            var aspectVar = aspectArg.asVariable();
+            if (aspectVar.isBound()) {
+                aspectClass = getOWLClass(arguments, 1); // throws exception if not a class
+            } else {
+                // variable arg but not bound - create new and bind to variable
+                aspectClass = df.getOWLClass(IRI.create(onto.getOntologyID().getOntologyIRI().get().toString() + "#" + UUID.randomUUID().toString()));
+                OWLDeclarationAxiom aspectClassDeclarationAxiom = df.getOWLDeclarationAxiom(aspectClass);
+                changes.add(new AddAxiom(onto, aspectClassDeclarationAxiom));
+                aspectVar.setBuiltInResult(createClassBuiltInArgument(aspectClass));
+            }
+        } else {
+            aspectClass = getOWLClass(arguments, 1); // throws exception if not a class
+        }
+
+        // opArg can either be variable or concrete value
+        // if variable, must be bound
+        // either way, value must be an OWLObjectProperty
+        final OWLObjectProperty op = getOWLObjectProperty(arguments, 1);
+        final OWLNamedIndividual i1 = getOWLNamedIndividual(arguments, 2);
+        final OWLNamedIndividual i2 = getOWLNamedIndividual(arguments, 3);
+
+
+        var joinPointAxiomOptional = onto.getNegativeObjectPropertyAssertionAxioms(i1).stream().filter(ax -> ax.getProperty().equals(op) && ax.getObject().equals(i2)).findFirst();
+        OWLNegativeObjectPropertyAssertionAxiom joinPointAxiom = null;
+        if (joinPointAxiomOptional.isPresent()) {
+            joinPointAxiom = joinPointAxiomOptional.get();
+        } else {
+            joinPointAxiom = df.getOWLNegativeObjectPropertyAssertionAxiom(op, i1, i2);
+        }
+        changes.add(new AddAxiom(onto, joinPointAxiom));
+
+        man.applyChanges(changes);
+
+        OWLAspectManager aspectManager = AspectOWLEditorKitHook.getAspectManager(man);
+        OWLAspectAssertionAxiom aspectAssertionAxiom = aspectManager.getAspectAssertionAxiom(onto, new AspectOWLJoinPointAxiomPointcut(joinPointAxiom), aspectManager.getAspect(aspectClass, Collections.EMPTY_SET, Collections.EMPTY_SET));
+        aspectManager.addAspect(onto, aspectAssertionAxiom);
+
+        return true;
+    }
     /**
      * Satisfied iff
      * - the first argument is an OWLAspect name A (if unbound, a new aspect will be created and bound to it),
@@ -176,12 +235,12 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
     public boolean temporal(List<SWRLBuiltInArgument> arguments) throws SWRLBuiltInException {
         checkNumberOfArgumentsEqualTo(4, arguments.size());
         var aspectArg = arguments.get(0);
-        var opArg = arguments.get(1);
+//        var opArg = arguments.get(1);
         var indArg = arguments.get(2);
-        var includeIndArg = arguments.get(3);
+//        var includeIndArg = arguments.get(3);
 
-        var op = getOWLObjectProperty(opArg, 2);
-        var includeArg = getBoolean(includeIndArg, 4);
+        var op = getOWLObjectProperty(arguments, 2);
+        var includeArg = getBoolean(arguments, 4);
 
         OWLOntology onto = getBuiltInBridge().getOWLOntology();
         OWLOntologyManager man = onto.getOWLOntologyManager();
@@ -193,7 +252,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
         if (aspectArg.isVariable()) {
             var aspectVar = aspectArg.asVariable();
             if (aspectVar.isBound()) {
-                aspectClass = getOWLClass(aspectArg, 1); // throws exception if not a class
+                aspectClass = getOWLClass(arguments, 1); // throws exception if not a class
             } else {
                 // variable arg but not bound - create new and bind to variable
                 aspectClass = df.getOWLClass(IRI.create(onto.getOntologyID().getOntologyIRI().get().toString() + "#" + UUID.randomUUID().toString()));
@@ -202,14 +261,14 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
                 aspectVar.setBuiltInResult(createClassBuiltInArgument(aspectClass));
             }
         } else {
-            aspectClass = getOWLClass(aspectArg, 1); // throws exception if not a class
+            aspectClass = getOWLClass(arguments, 1); // throws exception if not a class
         }
 
         OWLNamedIndividual ind = null;
         if (indArg.isVariable()) {
             var indVar = indArg.asVariable();
             if (indVar.isBound()) {
-                ind = getOWLNamedIndividual(indArg, 3); // throws exception if not a class
+                ind = getOWLNamedIndividual(arguments, 3); // throws exception if not a class
             } else {
                 // variable arg but not bound - create new and bind to variable
                 ind = df.getOWLNamedIndividual(IRI.create(onto.getOntologyID().getOntologyIRI().get().toString() + "#" + UUID.randomUUID().toString()));
@@ -218,7 +277,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
                 indVar.setBuiltInResult(createNamedIndividualBuiltInArgument(ind));
             }
         } else {
-            ind = getOWLNamedIndividual(indArg, 3); // throws exception if not a class
+            ind = getOWLNamedIndividual(arguments, 3); // throws exception if not a class
         }
 
         // A ≡ op.{T1} ⊔ {T1}
@@ -235,28 +294,45 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
 
     public boolean deontic(List<SWRLBuiltInArgument> arguments) throws SWRLBuiltInException {
         // TODO implement
-        return true;
+        return false;
     }
 
     public boolean nest(List<SWRLBuiltInArgument> arguments) throws SWRLBuiltInException {
         // TODO implement
-        return true;
+        return false;
     }
 
-    private OWLNamedIndividual getOWLNamedIndividual(SWRLBuiltInArgument arg, int argPos) throws SWRLBuiltInException {
-        return checkAndGetActualArgument(arg, NAMED_INDIVIDUAL, argPos).asSWRLNamedIndividualBuiltInArgument().getOWLNamedIndividual();
+//    /**
+//     * Gathers known instances of an OWL class (second arg) in a list (which will then be bound to the first arg)
+//     * @param arguments
+//     * @return
+//     * @throws SWRLBuiltInException
+//     */
+//    public boolean knownDirectInstances(List<SWRLBuiltInArgument> arguments) throws SWRLBuiltInException {
+//        OWLClass clazz = getOWLClass(arguments, 1);
+//
+//        OWLOntology onto = getBuiltInBridge().getOWLOntology();
+//        OWLOntologyManager man = onto.getOWLOntologyManager();
+//        OWLDataFactory df = man.getOWLDataFactory();
+//
+//        onto.getIndividualsInSignature(Imports.INCLUDED).stream().filter(ind -> ind.)
+//        return true;
+//    }
+
+    private OWLNamedIndividual getOWLNamedIndividual(List<SWRLBuiltInArgument> arguments, int argPos) throws SWRLBuiltInException {
+        return checkAndGetActualArgument(arguments, NAMED_INDIVIDUAL, argPos).asSWRLNamedIndividualBuiltInArgument().getOWLNamedIndividual();
     }
 
-    private OWLClass getOWLClass(SWRLBuiltInArgument arg, int argPos) throws SWRLBuiltInException {
-        return checkAndGetActualArgument(arg, CLASS, argPos).asSWRLClassBuiltInArgument().getOWLClass();
+    private OWLClass getOWLClass(List<SWRLBuiltInArgument> arguments, int argPos) throws SWRLBuiltInException {
+        return checkAndGetActualArgument(arguments, CLASS, argPos).asSWRLClassBuiltInArgument().getOWLClass();
     }
 
-    private OWLObjectProperty getOWLObjectProperty(SWRLBuiltInArgument arg, int argPos) throws SWRLBuiltInException {
-        return checkAndGetActualArgument(arg, OBJECT_PROPERTY, argPos).asSWRLObjectPropertyBuiltInArgument().getOWLObjectProperty();
+    private OWLObjectProperty getOWLObjectProperty(List<SWRLBuiltInArgument> arguments, int argPos) throws SWRLBuiltInException {
+        return checkAndGetActualArgument(arguments, OBJECT_PROPERTY, argPos).asSWRLObjectPropertyBuiltInArgument().getOWLObjectProperty();
     }
 
-    private Boolean getBoolean(SWRLBuiltInArgument arg, int argPos) throws SWRLBuiltInException {
-        OWLLiteral literal = checkAndGetActualArgument(arg, LITERAL, argPos).asSWRLLiteralBuiltInArgument().getLiteral();
+    private Boolean getBoolean(List<SWRLBuiltInArgument> arguments, int argPos) throws SWRLBuiltInException {
+        OWLLiteral literal = checkAndGetActualArgument(arguments, LITERAL, argPos).asSWRLLiteralBuiltInArgument().getLiteral();
         try {
             return literal.parseBoolean();
         } catch (NumberFormatException e) {
@@ -264,7 +340,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
         }
     }
 
-    private SWRLBuiltInArgument checkAndGetActualArgument(SWRLBuiltInArgument arg, SWRLBuiltInArgumentType expectedType, int argPos) throws SWRLBuiltInException {
+    private SWRLBuiltInArgument checkAndGetActualArgument(List<SWRLBuiltInArgument> arguments, SWRLBuiltInArgumentType expectedType, int argPos) throws SWRLBuiltInException {
+        SWRLBuiltInArgument arg = arguments.get(argPos);
         if (arg.isVariable()) {
             var opVar = arg.asVariable();
             if (opVar.isUnbound()) {
