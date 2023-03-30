@@ -8,6 +8,7 @@
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:swrl="http://www.w3.org/2003/11/swrl#">
     <owl:Ontology rdf:about=""/>
+    <swrl:Builtin rdf:ID="ooo"/>
     <swrl:Builtin rdf:ID="opa"/>
     <swrl:Builtin rdf:ID="createOPA"/>
     <swrl:Builtin rdf:ID="createNegativeOPA"/>

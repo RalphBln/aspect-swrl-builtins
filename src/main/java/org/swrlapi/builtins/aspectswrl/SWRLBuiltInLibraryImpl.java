@@ -33,7 +33,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
 
     public static final String NAMESPACE = "https://ontology.aspectowl.xyz/built-ins/5.2.0/AspectSWRLBuiltinsLibrary.owl#";
 
-    private static final String[] BUILT_IN_NAMES = { "opa", "createOPA", "temporal", "deontic" };
+    private static final String[] BUILT_IN_NAMES = { "ooo", "opa", "createOPA", "temporal", "deontic" };
 
 
     public SWRLBuiltInLibraryImpl() {
@@ -97,6 +97,38 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
 
             return aspectManager.getAssertedAspects(onto, joinPointAxiom).stream().anyMatch(as -> as.asClassExpression().equals(aspect));
         }
+    }
+
+    /**
+     * Satisfied iff the first argument is an instance of the second by nominal class definition (ObjectOneOf)
+     * @param arguments
+     * @return
+     * @throws SWRLBuiltInException
+     * TODO Move to different built-in (has nothing to do with aspects)
+     */
+    public boolean ooo(List<SWRLBuiltInArgument> arguments) throws SWRLBuiltInException {
+        OWLClassExpression ce = getOWLClassExpression(arguments, 2);
+        if (!(ce instanceof OWLObjectOneOf)) {
+            return false;
+        }
+
+        OWLObjectOneOf ooo = (OWLObjectOneOf) ce;
+        var instances = ooo.getIndividuals();
+
+        if (arguments.get(0).isVariable()) {
+            var indVar = arguments.get(0).asVariable();
+            if (indVar.isBound()) {
+                return instances.contains(getOWLNamedIndividual(arguments, 1));
+            } else {
+                final Map<@NonNull Integer, @NonNull SWRLMultiValueVariableBuiltInArgument> outputMultiValueArguments = createOutputMultiValueArguments(arguments);
+                instances.forEach(individual -> outputMultiValueArguments.get(0).addArgument(createNamedIndividualBuiltInArgument(individual.asOWLNamedIndividual())));
+                return processResultMultiValueArguments(arguments, outputMultiValueArguments);
+            }
+
+        } else {
+            return instances.contains(getOWLNamedIndividual(arguments, 1));
+        }
+
     }
 
     /**
@@ -325,6 +357,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
 
     private OWLClass getOWLClass(List<SWRLBuiltInArgument> arguments, int argPos) throws SWRLBuiltInException {
         return checkAndGetActualArgument(arguments, CLASS, argPos).asSWRLClassBuiltInArgument().getOWLClass();
+    }
+
+    private OWLClassExpression getOWLClassExpression(List<SWRLBuiltInArgument> arguments, int argPos) throws SWRLBuiltInException {
+        return checkAndGetActualArgument(arguments, CLASS_EXPRESSION, argPos).asSWRLClassExpressionBuiltInArgument().getOWLClassExpression();
     }
 
     private OWLObjectProperty getOWLObjectProperty(List<SWRLBuiltInArgument> arguments, int argPos) throws SWRLBuiltInException {
