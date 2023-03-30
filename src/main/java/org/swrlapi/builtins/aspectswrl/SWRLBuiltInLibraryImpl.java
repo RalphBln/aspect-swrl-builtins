@@ -340,8 +340,16 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary {
         }
     }
 
+    /**
+     * argPos: natural argument position (count starts from 1)!
+     * @param arguments
+     * @param expectedType
+     * @param argPos
+     * @return
+     * @throws SWRLBuiltInException
+     */
     private SWRLBuiltInArgument checkAndGetActualArgument(List<SWRLBuiltInArgument> arguments, SWRLBuiltInArgumentType expectedType, int argPos) throws SWRLBuiltInException {
-        SWRLBuiltInArgument arg = arguments.get(argPos);
+        SWRLBuiltInArgument arg = arguments.get(argPos - 1);
         if (arg.isVariable()) {
             var opVar = arg.asVariable();
             if (opVar.isUnbound()) {
