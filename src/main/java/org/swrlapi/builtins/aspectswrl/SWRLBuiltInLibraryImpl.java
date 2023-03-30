@@ -4,7 +4,6 @@ import org.semanticweb.owlapi.model.parameters.Imports;
 import xyz.aspectowl.owlapi.model.OWLAspectAssertionAxiom;
 import xyz.aspectowl.owlapi.model.AspectOWLJoinPointAxiomPointcut;
 import xyz.aspectowl.owlapi.model.OWLAspectManager;
-import xyz.aspectowl.owlapi.protege.AspectOWLEditorKitHook;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.semanticweb.owlapi.model.*;
 import org.slf4j.Logger;
@@ -15,6 +14,7 @@ import org.swrlapi.builtins.arguments.SWRLBuiltInArgumentType;
 import org.swrlapi.builtins.arguments.SWRLMultiValueVariableBuiltInArgument;
 import org.swrlapi.exceptions.SWRLBuiltInException;
 import org.swrlapi.exceptions.SWRLBuiltInLibraryException;
+import xyz.aspectowl.protege.AspectOWLEditorKitHook;
 
 import java.util.*;
 

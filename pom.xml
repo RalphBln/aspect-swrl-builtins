@@ -32,7 +32,7 @@
 
         <dependency>
             <groupId>xyz.aspectowl</groupId>
-            <artifactId>protege.plugin</artifactId>
+            <artifactId>aspectowl-protege-plugin</artifactId>
             <version>v5.6.0.2-j15</version>
             <scope>provided</scope>
         </dependency>
